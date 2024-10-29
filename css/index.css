@@ -1,0 +1,131 @@
+:root{
+    --Azul-pastel:  #B0C1D9 ;
+    --Gris-Azulado-Oscuro: #3B4B59;
+    --Azul-Grisaceo: #8EA8BF ;
+    --Beige-Suave: #D9BFA9 ;
+    --Negro: #0D0D0D ; 
+    --Beige-Gris: #f6f4f3;
+    --Blanco: #ffffff;
+}
+
+.Fondo{
+    min-width: 320px; /* Limita el tamaño mínimo de la pantalla */
+    height: 100vh;
+    background-image: url(img/Diseño.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 5px;
+}
+
+.contenedor{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    width: 90vw;
+    height: 100vh;
+    justify-content: center;
+}
+
+#info{
+    grid-column: span 1; /* Ocupará una columna, puedes cambiar a span 2 si quieres más espacio */
+    width: 100%;
+    margin: 0 auto;
+    padding-left: 15%;
+}
+
+.frases{
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    color: var(--Gris-Azulado-Oscuro);
+    font-size: clamp(3rem, 5vw, 5rem); /* Adaptativo al tamaño de pantalla */
+    margin-top: 25%;
+}
+
+.boton{
+    background-color: var(--Gris-Azulado-Oscuro);
+    color: var(--Blanco);
+    font-size: 150%;
+    padding: 20px 70px;
+    margin: 0 auto;
+    border: none;
+    border-radius: 5px;
+    transition: transform 0.3s ease-in-out;
+    display: block;
+}
+
+.boton:hover{
+    background-color: var(--Azul-Grisaceo);
+}
+
+.boton:active{
+    transform: scale(0.9);
+}
+
+#logo{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    width: 100%;
+    height: auto;
+    padding-top: 20%;
+    
+}
+
+.imagen{
+    width: 100%;
+    margin: 10% auto 50% auto;
+}
+
+.imagen2{
+    width: 80%;
+    margin: 0 auto 50% auto;
+}
+
+.texto, .texto1, .texto2{
+    margin: 2% auto;
+    font-family: 'Open Sans', sans-serif;
+    color: var(--Negro);
+}
+
+.texto{
+    font-size: 300%;
+    margin-top: 20%;
+}
+
+.texto1{
+    font-size: 300%;
+}
+
+.texto2{
+    font-size: 200%;
+}
+
+.contenedorII{
+    display: grid;
+    grid-template-rows: 1fr auto;
+    margin-top: 0;
+}
+
+.sombraII{
+    -webkit-box-shadow: 0px 4px 12px 0px rgba(112,112,112,0.54);
+    -moz-box-shadow: 0px 4px 12px 0px rgba(112,112,112,0.54);
+    box-shadow: 0px 4px 12px 0px rgba(112,112,112,0.54);
+    background-color: var(--Azul-Grisaceo);
+    padding: 1rem;
+}
+
+.contactos{
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 200%;
+}
+
+@media screen and(max-width: 768px){
+
+}
+
+@media screen and(max-width: 480px){
+
+
+}

@@ -1,0 +1,257 @@
+:root {
+    --Azul-pastel:  #B0C1D9;
+    --Gris-Azulado-Oscuro: #3B4B59;
+    --Azul-Grisaceo: #8EA8BF;
+    --Beige-Suave: #D9BFA9;
+    --Negro: #0D0D0D;
+    --Beige-Gris: #f6f4f3;
+    --Blanco: #ffffff;
+}
+
+body {
+    min-width: 320px; 
+    height: 100vh;
+    background-image: url(img/Diseño.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 5px;
+}
+
+
+.contenedor {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+.row{
+    display: grid;
+    grid-row: 1fr 2fr;
+    gap: 50px;
+}
+
+
+.logos {
+    display: grid;
+    grid-template-columns: 1fr 1fr ; /* Distribuye el logo y el texto en dos columnas */
+    gap: 15px;
+    align-items: center;
+    
+}
+
+.imagen {
+    width: 80%;
+    margin: 0 auto;
+    
+}
+
+.imagen2 {
+    width: 60%;
+    margin-top: 20px;
+}
+
+.imagenU{
+    width: 35%;
+    margin: 0 auto;
+    padding-top: 0%;
+    padding-bottom: 10%;
+}
+
+
+.texto, .texto1, .texto2 {
+    font-family: 'Open Sans', sans-serif;
+    color: var(--Negro);
+}
+
+.texto {
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+.texto1 {
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+.texto2 {
+    font-size: 1.5rem;
+    margin-top: 10px;
+}
+
+
+.formulario {
+    display: grid;
+    grid-template-rows: 1fr; 
+    gap: 15px;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    background: #e0e0e0;
+    box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+    border-radius: 20px;
+    max-width: 500px;
+    margin: 10%;
+    text-align: center;
+}
+
+
+.etiqueta {
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+    }
+
+    #correoE, #passw {
+        width: 70%; 
+        margin: 0 auto;
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    input[type="email"], input[type="password"], input[type="submit"], input[type="reset"] {
+        width: 70%; 
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    border: 1px solid var(--Gris-Azulado-Oscuro);
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin: 0 auto; 
+    display: block;
+    }
+
+.formD{
+    display: grid;
+    gap: 1px;
+}
+
+.boton{
+    background-color: var(--Gris-Azulado-Oscuro);
+    color: var(--Blanco);
+    font-size: 200%;
+    padding: 5px 10px;
+    margin: 0 auto;
+    border: none;
+    border-radius: 50px;
+    transition: transform 0.3s ease-in-out;
+    display: block;
+}
+
+.boton:hover{
+    background-color: var(--Azul-Grisaceo);
+}
+
+.boton:active{
+    transform: scale(0.9);
+}
+
+
+@media screen and (max-width: 768px) {
+    .contenedor {
+        grid-template-columns: 1fr; /
+     }
+
+    .logos {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .imagen, .imagen2 {
+        width: 45%;
+        margin: 0 auto;
+        padding-top: 2.5%;
+        padding-bottom: 0%;
+    }
+
+    .formulario {
+        max-width: 90%; 
+        padding: 20px;
+        margin-top: 0%;
+        align-items: center;
+    }
+
+    input[type="email"], input[type="password"] {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+
+    input[type="submit"], input[type="reset"] {
+        font-size: 0.9rem;
+        padding: 8px;
+        width: 60%;
+    }
+
+    #correoE, #passw {
+        width: 60%; 
+        margin: 0 auto;
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    .texto {
+        font-size: 2rem;
+        padding-top: 0%;
+    }
+
+    .texto1 {
+        font-size: 2rem;
+    }
+
+    .texto2 {
+        font-size: 1.2rem;
+    }
+    .boton{
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .contenedor {
+        grid-template-columns: 1fr; 
+    }
+
+    .logos {
+        grid-template-columns: 1fr; 
+    }
+
+    .imagen, .imagen2 {
+        width: 30%; 
+    }
+
+    .formulario {
+        max-width: 100%;
+    }
+
+    input[type="email"], input[type="password"] {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+
+    input[type="submit"], input[type="reset"] {
+        font-size: 0.9rem;
+        padding: 8px;
+        width: 60%;
+    }
+
+    #correoE, #passw {
+        width: 60%; 
+        margin: 0 auto;
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    .texto {
+        font-size: 1.8rem;
+    }
+
+    .texto1 {
+        font-size: 1.8rem;
+    }
+
+    .texto2 {
+        font-size: 1rem;
+        
+    }
+}

@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap');
+
+/* Paleta de colores */
+:root {
+    --primary-bg-color: #A8DADC; /* Azul pastel */
+    --secondary-bg-color: #457B9D; /* Gris azulado */
+    --font-color: rgba(0, 0, 0, .8);
+    --form-border-color: rgba(0, 0, 0, .1);
+    --beige-suave: #F1FAEE;
+    --oscuro: #1D3557;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    align-items: center;
+    background: var(--beige-suave); /* Beige suave */
+    color: var(--font-color);
+    display: inline-block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    height: 100vh;
+    justify-items: center;
+    width: 100vw;
+}
+
+form {
+    background: var(--primary-bg-color);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 100%;
+}
+
+/* Encabezados del formulario */
+h1, h2 {
+    color: var(--secondary-bg-color);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* Estilo general para etiquetas y entradas */
+label {
+    color: var(--oscuro);
+    display: inline-flex;
+    margin-bottom: 5px; /* Reducido a 5px */
+    font-weight: 600;
+}
+
+/* Ajustes para inputs */
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 30px; /* Reducido a 10px */
+    border: 1px solid var(--form-border-color);
+    border-radius: 5px;
+    background-color: var(--beige-suave);
+    color: var(--font-color);
+}
+
+
+/* Alinear radios con su texto */
+input[type="radio"], input[type="checkbox"] {
+    width: auto;
+    margin-right: 0px;
+    vertical-align: middle;
+}
+
+
+/* Estilo para los botones */
+.button {
+    background-color: var(--secondary-bg-color);
+    color: var(--beige-suave);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: var(--beige-suave);
+    color: var(--oscuro);
+}
+
+/* Secciones del formulario */
+.seccion {
+    display: none;
+}
+
+.seccion.active {
+    display: block;
+}
+
+
+.radio{
+    align-items: center;
+    margin: 0%;
+}
+
+

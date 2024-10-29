@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/Login.css">
+    <title>Login</title>
+    <link rel="icon" href="img/Huella3.png">
+</head>
+<body>
+    <div class="contenedor">
+        <div class="row">
+            <div class="logos">
+            <img src="img/Huella3.png" class="imagen" alt="Logo principal">
+            <div class="logos1">
+                <h1 class="texto">ALERTA</h1>
+                <h1 class="texto1">TEC</h1>
+                <h2 class="texto2">“Habla, nosotros te respaldamos”</h2>
+                <img src="img/HuellaSin.png " class="imagen2" alt="Logo secundario">
+            </div>
+            </div>
+            <script>
+                function regresar(){
+                    window.location.href = "index.html"
+                }
+            </script>
+            <div>
+                <button onclick="regresar()" class="boton"> < </button>
+            </div>
+        </div>
+
+        <div class="formulario">
+            <form class="formD">  
+                <img src="img/Usuario.png" class="imagenU"><br>
+                <label for="user_name" class="etiqueta">Usuario:</label>
+                <input type="email" id="correoE" name="user_name" required><br>
+                <label for="user_name" class="etiqueta">Contraseña:</label>
+                <input type="password" id="passw" name="passw" required><br>
+                <input type="submit" value="Iniciar sesión" class="boton"><br>
+                <input type="reset" value="Reset" class="boton">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
