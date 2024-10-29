@@ -1,3 +1,92 @@
+<?php
+require './includes/database.php';
+require './includes/encryption.php';
+
+// Verificar si el formulario ha sido enviado
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Capturar datos del formulario
+    $tipoReporte = $_POST['tipoReporte'] ?? null;
+    $nombreR = $_POST['nombreR'] ?? null; // Es opcional si es anónimo
+    $correoR = $_POST['correoR'] ?? null;
+    $numTelR = $_POST['numTelR'] ?? null;
+    $relUniR = $_POST['relUniR'] ?? null;
+    $tipoDenuncia = $_POST['tipoDenuncia'] ?? null;
+    $fechaHecho = $_POST['fechaHecho'];
+    $lugarHecho = $_POST['lugarHecho'] ?? null;
+    $detallesLugar = $_POST['detallesLugar'] ?? null;
+    $descripcionR = $_POST['descripcionR'] ?? null;
+    $estadoDenuncia = "Pendiente"; // Inicialmente la denuncia se registra como pendiente
+    //$prioridad = $_POST['prioridad']; // Podría depender de la gravedad
+    $priotidad = 1;  //Le damos 1 por ahora unicamente para que sea llenada la base de datos.
+
+    $detallesLugar = encryptData($detallesLugar);
+
+    // Insertar datos del reporte en la tabla REPORTE
+    $stmt = $conexion->prepare("INSERT INTO REPORTE (fechaReporte, tipoReporte, nombreR, correoR, numTelR, relUniR, tipoDenuncia, fechaHecho, lugarHecho, detallesLugar, descripcionR, estadoDenuncia, prioridad) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssssssssi", $tipoReporte, $nombreR, $correoR, $numTelR, $relUniR, $tipoDenuncia, $fechaHecho, $lugarHecho, $detallesLugar, $descripcionR, $estadoDenuncia, $prioridad);
+
+    if ($stmt->execute()) {
+        $idReporte = $stmt->insert_id; // Obtener el ID del reporte insertado
+        echo "Reporte registrado con éxito. ID: " . $idReporte;
+
+        // Insertar testigos si se proporcionaron
+        if (isset($_POST['testigos'])) {
+            foreach ($_POST['testigos'] as $testigo) {
+                $stmtTestigo = $conexion->prepare("INSERT INTO TESTIGOS (nombreT, relUniT) VALUES (?, ?)");
+                $stmtTestigo->bind_param("ss", $testigo['nombre'], $testigo['relacion']);
+                if ($stmtTestigo->execute()) {
+                    $idTestigo = $stmtTestigo->insert_id;
+                    $stmtReporteTestigo = $conexion->prepare("INSERT INTO REPORTE_TESTIGO (idReporte, idTestigo) VALUES (?, ?)");
+                    $stmtReporteTestigo->bind_param("ii", $idReporte, $idTestigo);
+                    $stmtReporteTestigo->execute();
+                }
+            }
+        }
+
+        // Insertar agresores si se proporcionaron
+        if (isset($_POST['agresores'])) {
+            foreach ($_POST['agresores'] as $agresor) {
+                $stmtAgresor = $conexion->prepare("INSERT INTO AGRESORES (nombreA, relUniA) VALUES (?, ?)");
+                $stmtAgresor->bind_param("ss", $agresor['nombre'], $agresor['relacion']);
+                if ($stmtAgresor->execute()) {
+                    $idAgresor = $stmtAgresor->insert_id;
+                    $stmtReporteAgresor = $conexion->prepare("INSERT INTO REPORTE_AGRESOR (idReporte, idAgresor) VALUES (?, ?)");
+                    $stmtReporteAgresor->bind_param("ii", $idReporte, $idAgresor);
+                    $stmtReporteAgresor->execute();
+                }
+            }
+        }
+
+        // Insertar evidencias si se proporcionaron
+        if (isset($_FILES['evidencias'])) {
+            foreach ($_FILES['evidencias']['tmp_name'] as $index => $tmpName) {
+                $nombreEvidencia = $_FILES['evidencias']['name'][$index];
+                $rutaEvidencia = 'uploads/' . basename($nombreEvidencia);
+
+                if (move_uploaded_file($tmpName, $rutaEvidencia)) {
+                    $stmtEvidencia = $conexion->prepare("INSERT INTO EVIDENCIAS (nombreE, rutaArchivoE, descripcionE) VALUES (?, ?, ?)");
+                    $descripcionE = $_POST['descripcionEvidencias'][$index]; // Suponiendo que existe un array con las descripciones
+                    $stmtEvidencia->bind_param("sss", $nombreEvidencia, $rutaEvidencia, $descripcionE);
+                    if ($stmtEvidencia->execute()) {
+                        $idEvidencia = $stmtEvidencia->insert_id;
+                        $stmtReporteEvidencia = $conexion->prepare("INSERT INTO REPORTE_EVIDENCIAS (idReporte, idE) VALUES (?, ?)");
+                        $stmtReporteEvidencia->bind_param("ii", $idReporte, $idEvidencia);
+                        $stmtReporteEvidencia->execute();
+                    }
+                }
+            }
+        }
+
+    } else {
+        echo "Error al registrar el reporte: " . $stmt->error;
+    }
+
+    $stmt->close();
+    $conexion->close();
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,7 +100,7 @@
     <h1>Formulario de Denuncia</h1>
 
     <!-- Formulario dividido por secciones -->
-    <form id="formulario">
+    <form id="formulario" method="POST" >
 
         <!-- Sección 1: Tipo de denuncia -->
         <div class="seccion active" id="seccion1">
@@ -25,14 +114,14 @@
             <label for="anonimo_no">No</label><br><br>
 
                 <div id="no_anonimo_datos" style="display:none;">
-                    <label for="nombre_completo">Nombre completo:</label>
-                    <input type="text" id="nombre_completo" name="nombre_completo"><br>
+                    <label for="nombreR">Nombre completo:</label>
+                    <input type="text" id="nombreR" name="nombreR"><br>
 
-                    <label for="correo">Correo Electrónico (preferentemente institucional):</label>
-                    <input type="email" id="correo" name="correo"><br>
+                    <label for="correoR">Correo Electrónico (preferentemente institucional):</label>
+                    <input type="email" id="correoR" name="correoR"><br>
 
-                    <label for="telefono">Número telefónico (opcional):</label>
-                    <input type="tel" id="telefono" name="telefono"><br>
+                    <label for="numTelR">Número telefónico (opcional):</label>
+                    <input type="tel" id="numTelR" name="numTelR"><br>
 
                     <p><strong>Aviso legal:</strong><br>
                     Al realizar una denuncia sin anonimidad autorizas que tu información sea compartida con las autoridades competentes dentro de la institución para que se tomen las medidas necesarias.<br><br></p>
@@ -118,15 +207,15 @@
             <input class="radio" type="checkbox" name="agresion" value="Otro"> Otro (especificar):<br><br>
             <input type="text" name="agresion_otro" id="agresion_otro"><br>
 
-            <label for="fecha_incidente">5. ¿Cuándo ocurrió el incidente?</label>
-            <input type="date" id="fecha_incidente" name="fecha_incidente"><br>
+            <label for="fechaHecho">5. ¿Cuándo ocurrió el incidente?</label>
+            <input type="date" id="fechaHecho" name="fechaHecho"><br>
 
             <label>6. ¿Dónde ocurrió el incidente?</label><br>
             <input class="radio" type="radio" id="dentro" name="lugar_incidente" value="Dentro de la institución">
             <label for="dentro">Dentro de la institución</label><br><br>
                 <div id="lugar_dentro" style="display:none;">
-                    <label for="lugar_detalle">Describir el lugar (aula, edificio, áreas comunes, etc.):</label>
-                    <input type="text" id="lugar_detalle" name="lugar_detalle"><br>
+                    <label for="detallesLugar">Describir el lugar (aula, edificio, áreas comunes, etc.):</label>
+                    <input type="text" id="detallesLugar" name="detallesLugar"><br>
                 </div>
 
             <input class="radio" type="radio" id="fuera" name="lugar_incidente" value="Fuera de la institución">
@@ -186,7 +275,7 @@
             <h2>Sección 5: Finalizar denuncia</h2>
             <label>11. ¿Deseas recibir actualizaciones sobre el estado de la denuncia?</label><br>
             <input class="radio" type="radio" id="actualizaciones_correo" name="actualizaciones" value="Correo">
-            <label for="actualizaciones_correo">Sí, por correo electrónico</label><br><br>
+            <label for="actualizaciones_correo">Sí, por correoR electrónico</label><br><br>
             <input class="radio" type="radio" id="actualizaciones_telefono" name="actualizaciones" value="Teléfono">
             <label for="actualizaciones_telefono">Sí, por teléfono</label><br><br>
             <input class="radio" type="radio" id="no_actualizaciones" name="actualizaciones" value="No">
@@ -370,10 +459,10 @@
             }
 
             if (anonimato.value === "No") {
-                const nombre = document.getElementById('nombre_completo').value.trim();
-                const correo = document.getElementById('correo').value.trim();
+                const nombre = document.getElementById('nombreR').value.trim();
+                const correoR = document.getElementById('correoR').value.trim();
         
-                if (!nombre || !correo) {
+                if (!nombre || !correoR) {
                     alert('Por favor llena los campos de nombre y correo para continuar.');
                     return;
                 }
@@ -438,7 +527,7 @@
         //Validación de respuestas Sección 3
         function validarSeccion3() {
     const tiposAgresion = document.querySelectorAll('input[name="agresion"]:checked');
-    const fechaIncidente = document.getElementById('fecha_incidente').value;
+    const fechaIncidente = document.getElementById('fechaHecho').value;
     const lugarIncidente = document.querySelector('input[name="lugar_incidente"]:checked');
     const numAgresores = document.getElementById('num_agresores').value;
 
@@ -458,7 +547,7 @@
     }
 
     if (lugarIncidente.value === "Dentro de la institución") {
-        const lugarDetalle = document.getElementById('lugar_detalle').value.trim();
+        const lugarDetalle = document.getElementById('detallesLugar').value.trim();
         if (!lugarDetalle) {
             alert('Por favor proporciona detalles del lugar donde ocurrió el incidente.');
             return;
